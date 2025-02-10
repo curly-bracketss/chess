@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .bgblack {
+            background-color: white;
+        }
+
+        .bgwhite {
+            background-color: white;
+        }
+
+        .horse {
+            background: url('https://cdn-icons-png.flaticon.com/512/36/36209.png')center/contain;
+            background-repeat: no-repeat;
+            height: 80%;
+        }
+
+        .star {
+            background: url('https://static.thenounproject.com/png/114871-200.png')center/contain;
+            background-repeat: no-repeat;
+            height: 80%;
+        }
+
+        .empty {
+            background: transparent;
+        }
+
+        td {
+            width: 100px;
+            height: 90px;
+        }
+
+        p {
+            letter-spacing: 85px;
+            padding-left: 55px;
+            font-size: 30px;
+            font-weight: 600;
+        }
+
+        th {
+            font-size: 45px;
+            padding-right: 10px;
+        }
+
+        .filter {
+            filter: invert(100%);
+
+        }
+
+        #total {
+            background-color: transparent;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <select id="bir">
+    </select>
+    <select id="iki"></select>
+    <button id="btn" onclick="buttonOn1()">OK</button>
+    <p id="demo"></p>
+    <table id="table">
+    </table>
+
+
+    <script>
+        const demo = document.getElementById("demo")
+        const select = document.querySelectorAll("select")
+        const table = document.getElementById("table")
+        const bir = document.getElementById("bir")
+        const iki = document.getElementById("iki")
+        const btn = document.getElementById("btn")
+        const total = document.getElementById("total")
+        let kod = ' '
+        for (i = 0; i < 8; i++) {
+            kod += `<tr>`
+            bir.innerHTML += `<option value="${i}">${i + 1}</option>`
+            iki.innerHTML += `<option value="${i}">&#${65 + i}</option>`
+            demo.innerHTML += `&#${65 + i}`
+
+            kod += `<th>${i + 1}</th>`
+            for (k = 0; k < 8; k++) {
+                let divid = `${i},${k}`
+
+                kod += `<td  onclick="buttonOn(${i},${k})" class= "${((k % 2 == 1 && i % 2 == 0) || (k % 2 == 0 && i % 2 == 1)) ? "bgblack" : "bgwhite filter"}" >
+                  <div  id="${divid}"></div></td>`
+
+            }
+            kod += `</tr>`
+
+        }
+
+        function buttonOn(x, y) {
+            let divs = document.querySelectorAll("div");
+            for (let i = 0; i < divs.length; i++) {
+                divs[i].classList.remove("horse", "star");
+            }
+            let wanted = document.getElementById(`${x},${y}`);
+            wanted.classList.add("horse");
+
+            let arr1 = [
+                { row: 1, column: 2 },
+                { row: 2, column: 1 },
+                { row: 2, column: -1 },
+                { row: 1, column: -2 },
+                { row: -1, column: 2 },
+                { row: -1, column: -2 },
+                { row: -2, column: 1 },
+                { row: -2, column: -1 }
+            ];
+            let arr2 = [];
+            for (let a = 0; a < arr1.length; a++) {
+                let newRow = x + arr1[a].row;
+                let newCol = y + arr1[a].column;
+
+                if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+                    let cell = document.getElementById(`${newRow},${newCol}`);
+                    if (cell) cell.classList.add("star");
+                    arr2.push({ row: newRow, column: newCol });
+                }
+            }
+
+        }                    
+        function buttonOn1() {
+                let x = parseInt(bir.value);
+                let y = parseInt(iki.value);
+                buttonOn(x, y);
+        
+        };
+        table.innerHTML = kod
+
+    </script>
+</body>
+
+</html>
